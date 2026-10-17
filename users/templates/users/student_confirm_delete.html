@@ -1,0 +1,11 @@
+{% extends 'users/base.html' %}
+
+{% block content %}
+<h1>Удаление</h1>
+<p>Удалить студента «{{ object }}»?</p>
+<form method="post">
+  {% csrf_token %}
+  <button class="btn danger">Да, удалить</button>
+  <a href="{% url 'users:list' %}">Отмена</a>
+</form>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'users/base.html' %}
+
+{% block content %}
+<h1>Студенты</h1>
+
+<form method="get">
+  <input type="text" name="q" value="{{ q }}" placeholder="Поиск по ФИО">
+  <select name="group">
+    <option value="">Все группы</option>
+    {% for g in groups %}
+      <option value="{{ g }}" {% if g == current_group %}selected{% endif %}>{{ g }}</option>
+    {% endfor %}
+  </select>
+  <button class="btn">Найти</button>
+  {% if user.is_authenticated %}
+    <a class="btn" href="{% url 'users:create' %}">+ Добавить</a>
+  {% endif %}
+</form>
+<br>
+
+<table>
+  <tr><th>ФИО</th><th>Группа</th><th>Курс</th><th>Статус</th><th>Действия</th></tr>
+  {% for s in students %}
+  <tr>
+    <td><a href="{% url 'users:detail' s.pk %}">{{ s.full_name|default:s.username }}</a></td>
+    <td>{{ s.group }}</td>
+    <td>{{ s.course }}</td>
+    <td>{{ s.get_status_display }}</td>
+    <td>
+      {% if user.is_authenticated %}
+        <a href="{% url 'users:update' s.pk %}">Изменить</a> |
+        <a href="{% url 'users:delete' s.pk %}">Удалить</a>
+      {% endif %}
+    </td>
+  </tr>
+  {% empty %}
+  <tr><td colspan="5">Студентов не найдено</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}
